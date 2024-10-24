@@ -15,38 +15,39 @@
 
     <table id="siswaTable" class="table table-bordered">
         <thead>
-        <tr>
-            <th>ID</th>
-            <th>Nama Siswa</th>
-            <th>NIS</th>
-            <th>Tanggal Lahir</th>
-            <th>Kelas</th>
-            <th>Actions</th>
-        </tr>
+            <tr>
+                <th>ID</th>
+                <th>Nama Siswa</th>
+                <th>NIS</th>
+                <th>Tanggal Lahir</th>
+                <th>Kelas</th>
+                <th>Actions</th>
+            </tr>
         </thead>
         <tbody>
-        @foreach ($siswa as $item)
-            <tr>
-                <td>{{ $item->id }}</td>
-                <td>{{ $item->nama }}</td>
-                <td>{{ $item->nis }}</td>
-                <td>{{ $item->tanggal_lahir->format('d-m-Y') }}</td>
-                <td>{{ $item->kelas ? $item->kelas->nama : 'Tidak ada kelas' }}</td>
-                <td>
-                    <button class="btn btn-warning editSiswa" data-id="{{ $item->id }}">Edit</button>
-                    <form action="{{ route('siswa.destroy', $item->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        @endforeach
+            @foreach ($siswa as $item)
+                <tr>
+                    <td>{{ $item->id }}</td>
+                    <td>{{ $item->nama }}</td>
+                    <td>{{ $item->nis }}</td>
+                    <td>{{ $item->tanggal_lahir->format('d-m-Y') }}</td>
+                    <td>{{ $item->kelas->nama }}</td>
+                    <td>
+                        <button class="btn btn-warning editSiswa" data-id="{{ $item->id }}">Edit</button>
+                        <form action="{{ route('siswa.destroy', $item->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
         </tbody>
     </table>
 
     <!-- Create/Edit Modal -->
-    <div class="modal fade" id="siswaModal" tabindex="-1" role="dialog" aria-labelledby="siswaModalLabel" aria-hidden="true">
+    <div class="modal fade" id="siswaModal" tabindex="-1" role="dialog" aria-labelledby="siswaModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -103,7 +104,7 @@
 
             $('.editSiswa').click(function() {
                 const id = $(this).data('id');
-                $.get(`/siswa/${id}/edit`, function(data) {
+                $.get("{{ route('siswa.index') }}/" + id + "/edit", function(data) {
                     $('#id_siswa').val(data.id);
                     $('#nama').val(data.nama);
                     $('#nis').val(data.nis);
@@ -120,9 +121,12 @@
                 e.preventDefault();
                 const method = $('#method').val();
                 const id = $('#id_siswa').val();
-                const url = method === 'POST' ? '/siswa' : `/siswa/${id}`;
+                const url = method === 'POST' ?
+                    "{{ route('siswa.store') }}" :
+                    "{{ route('siswa.update', '') }}/" + id;
+
                 $.ajax({
-                    type: method,
+                    type: 'POST',
                     url: url,
                     data: $(this).serialize(),
                     success: function(response) {
@@ -133,6 +137,7 @@
                     }
                 });
             });
+
         });
     </script>
 @stop

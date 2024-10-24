@@ -36,23 +36,23 @@ class KelasController extends Controller
         //
     }
 
-    public function edit(Kelas $kelas)
+    public function edit(Kelas $kela)
     {
-        return response()->json($kelas);
+        return response()->json($kela);
     }
 
-    public function update(Request $request, Kelas $kelas)
+    public function update(Request $request, Kelas $kela)
     {
         $request->validate([
                 'nama' => 'required|string|regex:/^Kelas\s+\d+[A-Z]?$/']
         );
-        $kelas->update($request->all());
+        $kela->update($request->all());
         return redirect()->route('kelas.index')->with('success', 'Kelas updated successfully.');
     }
 
-    public function destroy(Kelas $kelas)
+    public function destroy(Kelas $kela)
     {
-        $kelas->delete();
+        $kela->delete();
         return redirect()->route('kelas.index')->with('success', 'Kelas deleted successfully.');
 
     }
