@@ -10,7 +10,7 @@ class SiswaController extends Controller
 {
     public function index()
     {
-        $siswa = Siswa::with('kelas')->get();
+        $siswa = Siswa::has('kelas')->get();
         $kelas = Kelas::all();
         return view('siswa.index', compact('siswa', 'kelas'));
     }
