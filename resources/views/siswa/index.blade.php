@@ -31,7 +31,7 @@
                 <td>{{ $item->nama }}</td>
                 <td>{{ $item->nis }}</td>
                 <td>{{ $item->tanggal_lahir->format('d-m-Y') }}</td>
-                <td>{{ $item->kelas ? $item->kelas->nama : 'Tidak ada kelas' }}</td>
+                <td>{{ $item->kelas->nama }}</td>
                 <td>
                     <button class="btn btn-warning editSiswa" data-id="{{ $item->id }}">Edit</button>
                     <form action="{{ route('siswa.destroy', $item->id) }}" method="POST" style="display:inline;">
