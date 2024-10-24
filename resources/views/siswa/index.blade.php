@@ -31,7 +31,7 @@
                 <td>{{ $item->nama }}</td>
                 <td>{{ $item->nis }}</td>
                 <td>{{ $item->tanggal_lahir->format('d-m-Y') }}</td>
-                <td>{{ $item->kelas->nama }}</td>
+                <td>{{ $item->kelas ? $item->kelas->nama : 'Tidak ada kelas' }}</td>
                 <td>
                     <button class="btn btn-warning editSiswa" data-id="{{ $item->id }}">Edit</button>
                     <form action="{{ route('siswa.destroy', $item->id) }}" method="POST" style="display:inline;">
@@ -62,8 +62,8 @@
                         <input type="hidden" name="id" id="id_siswa">
 
                         <div class="form-group">
-                            <label for="nama_siswa">Nama Siswa</label>
-                            <input type="text" class="form-control" name="nama" id="nama_siswa" required>
+                            <label for="nama">Nama Siswa</label>
+                            <input type="text" class="form-control" name="nama" id="nama" required>
                         </div>
                         <div class="form-group">
                             <label for="nis">NIS</label>
@@ -105,7 +105,7 @@
                 const id = $(this).data('id');
                 $.get(`/siswa/${id}/edit`, function(data) {
                     $('#id_siswa').val(data.id);
-                    $('#nama_siswa').val(data.nama);
+                    $('#nama').val(data.nama);
                     $('#nis').val(data.nis);
                     let tanggalLahir = new Date(data.tanggal_lahir).toISOString().split('T')[0];
                     $('#tanggal_lahir').val(tanggalLahir);
@@ -116,17 +116,17 @@
                 });
             });
 
-            $('#filterForm').on('submit', function(e) {
+            $('#siswaForm').on('submit', function(e) {
                 e.preventDefault();
-                const filterNama = $('#filter_nama').val();
+                const method = $('#method').val();
+                const id = $('#id_siswa').val();
+                const url = method === 'POST' ? '/siswa' : `/siswa/${id}`;
                 $.ajax({
-                    url: '{{ route("kelas.index") }}',
-                    type: 'GET',
-                    data: { nama: filterNama },
+                    type: method,
+                    url: url,
+                    data: $(this).serialize(),
                     success: function(response) {
-                        // Replace table body with filtered results
-                        $('tbody').html(response);
-                        $('#filterModal').modal('hide');
+                        location.reload();
                     },
                     error: function(error) {
                         console.log(error);

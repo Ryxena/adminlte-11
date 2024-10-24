@@ -10,7 +10,7 @@ class SiswaController extends Controller
 {
     public function index()
     {
-        $siswa = Siswa::has('kelas')->get();
+        $siswa = Siswa::with('kelas')->get();
         $kelas = Kelas::all();
         return view('siswa.index', compact('siswa', 'kelas'));
     }
@@ -18,10 +18,10 @@ class SiswaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_siswa' => 'required|string|max:255',
+            'nama' => 'required|string|max:255',
             'nis' => 'required|string|max:20',
             'tanggal_lahir' => 'required|date',
-            'id_kelas' => 'required|exists:kelas,id_kelas',
+            'kelas_id' => 'required|exists:kelas,id',
         ]);
 
         Siswa::create($request->all());
@@ -36,10 +36,10 @@ class SiswaController extends Controller
     public function update(Request $request, Siswa $siswa)
     {
         $request->validate([
-            'nama_siswa' => 'required|string|max:255',
+            'nama' => 'required|string|max:255',
             'nis' => 'required|string|max:20',
             'tanggal_lahir' => 'required|date',
-            'id_kelas' => 'required|exists:kelas,id_kelas',
+            'kelas_id' => 'required|exists:kelas,id',
         ]);
 
         $siswa->update($request->all());
